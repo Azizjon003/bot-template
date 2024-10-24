@@ -30,3 +30,8 @@ working      Boolean @default(false)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
+
+model postgress_sessions {
+  id      String  @id
+  session String
+}
