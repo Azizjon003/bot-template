@@ -1,11 +1,11 @@
 import xss from "xss";
 import prisma from "../../prisma/prisma";
 
-enum enabledEnum {
-  one = "one",
-  two = "two",
-  three = "three",
-  four = "four",
+export enum enabledEnum {
+  USER = "USER",
+  ADMIN = "ADMIN",
+  INACTIVE = "INACTIVE",
+  WORKING = "WORKING",
 }
 const enabled = async (id: string, name: string): Promise<enabledEnum> => {
   name = xss(name);
@@ -17,19 +17,19 @@ const enabled = async (id: string, name: string): Promise<enabledEnum> => {
 
   if (user) {
     if (!user.isActive) {
-      return enabledEnum.three;
+      return enabledEnum.INACTIVE;
     }
     if (user.role === "USER") {
       if (user.working) {
         console.log("working");
-        return enabledEnum.four;
+        return enabledEnum.WORKING;
       }
-      return enabledEnum.one;
+      return enabledEnum.USER;
     } else if (user.role === "ADMIN") {
-      return enabledEnum.two;
+      return enabledEnum.ADMIN;
     }
 
-    return enabledEnum.one;
+    return enabledEnum.USER;
   } else {
     let user = await prisma.user.create({
       data: {
@@ -39,7 +39,7 @@ const enabled = async (id: string, name: string): Promise<enabledEnum> => {
       },
     });
 
-    return enabledEnum.one;
+    return enabledEnum.USER;
   }
 };
 

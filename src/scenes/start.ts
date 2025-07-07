@@ -1,5 +1,5 @@
 import { Scenes } from "telegraf";
-import enabled from "../utils/enabled";
+import enabled, { enabledEnum } from "../utils/enabled";
 import { keyboards } from "../utils/keyboards";
 const scene = new Scenes.BaseScene("start");
 
@@ -13,7 +13,7 @@ scene.enter(async (ctx: any) => {
 
   const enable = await enabled(String(user_id), String(user_name));
 
-  if (enable === "one" || enable === "four") {
+  if (enable === enabledEnum.USER || enable === enabledEnum.INACTIVE) {
     ctx.telegram.sendMessage(
       user_id,
       `Assalomu alaykum!\nYangi Taqdimot tugmasini bosib taqdimot yaratishni boshlashingiz mumkin!`,
@@ -22,12 +22,12 @@ scene.enter(async (ctx: any) => {
 
     console.log("start scene");
     return await ctx.scene.enter("control");
-  } else if (enable === "two") {
+  } else if (enable === enabledEnum.ADMIN) {
     const text = "Assalomu alaykum Admin xush kelibsiz";
 
     ctx.telegram.sendMessage(user_id, text, keyboards(admin_keyboard));
     return await ctx.scene.enter("admin");
-  } else if (enable === "three") {
+  } else if (enable === enabledEnum.WORKING) {
     ctx.telegram.sendMessage(
       user_id,
       "Assalomu alaykum.Kechirasiz siz admin tomonidan bloklangansiz"
